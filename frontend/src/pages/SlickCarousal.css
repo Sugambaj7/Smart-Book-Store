@@ -1,0 +1,33 @@
+.slick-next {
+  right: 40px;
+  z-index: 1;
+  width: 80px;
+}
+
+.slick-prev {
+  left: 40px;
+  z-index: 1;
+  width: 80px;
+}
+
+.slick-next::before,
+.slick-prev::before {
+  font-size: 30px;
+}
+
+.slick-dots li {
+  width: 12px;
+  height: 25px;
+}
+
+.slick-dots li button {
+  width: 25px;
+  height: 25px;
+}
+.slick-dots li button::before {
+  font-size: 10px;
+  width: 25px;
+  height: 25px;
+  line-height: 30px;
+}
+
