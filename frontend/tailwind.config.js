@@ -19,6 +19,16 @@ export default {
         custom_grey: "#B1B6C0",
         footer_black: "#282C34",
         dull_grey: "#8f8f8f",
+        custom_green: "#4BBF73",
+        custom_black: "#cfcfcf",
+      },
+      borderColor: {
+        border_green: "#4BBF73",
+        border_login_input: "#ced4da",
+      },
+      backgroundColor: {
+        custom_green: "#4BBF73",
+        custom_white: "#F7F7F9",
       },
     },
   },

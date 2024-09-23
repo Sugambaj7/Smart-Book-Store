@@ -1,54 +1,59 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 
 const NavBarComponent = () => {
   return (
     <header>
       <nav className="navbar">
-        <div className="top-nav  bg-footer_black h-[7vh]">
-          <div className="flex justify-between items-center h-full">
-            <h1 className="text-h3 pl-24 font-semibold py-3 text-white">
-              Smart Book Store
+        <div className="top-nav  bg-footer_black h-[11vh]">
+          <div className="flex items-center h-full w-full">
+            <h1 className="text-h3 pl-24 font-semibold py-3 text-white w-[20%]">
+              <Link to="/">Smart Book Store</Link>
             </h1>
-            <form className="pr-28 flex" action="" method="post">
-              <div className="h-8">
-                <input
-                  className="px-4 py-1 h-8"
-                  type="text"
-                  placeholder="Enter book name here !"
-                  tabIndex="-1"
-                />
-              </div>
-              <div className="h-8">
-                <input
-                  className="px-4 py-1 h-8 text-black bg-custom_grey"
-                  type="button"
-                  value="Search"
-                />
+            <form
+              className="flex items-center justify-start h-full w-[60%]"
+              action=""
+              method="post"
+            >
+              <div className="h-full flex pl-20 ">
+                <div className="h-full flex items-center">
+                  <input
+                    className="px-4 py-4 h-9 outline-none"
+                    type="text"
+                    placeholder="Search book..."
+                    name="search"
+                  />
+                </div>
+                <div className="h-full flex items-center ml-2">
+                  <div className="flex items-center px-3 py-4 h-5 text-center bg-footer_black border-2 border-border_green hover:bg-custom_green ">
+                    <input
+                      className="text-white"
+                      type="button"
+                      value="Search"
+                    />
+                  </div>
+                </div>
               </div>
             </form>
+            <div className="h-full flex items-center uppercase w-[20%]">
+              <ul className="flex">
+                <li className="text-custom_black flex items-center hover:text-white">
+                  <FaShoppingCart />
+                  <Link to="/cart" className="pl-2 ">
+                    Cart
+                  </Link>
+                </li>
+                <li className="text-custom_black flex items-center pl-8 hover:text-white">
+                  <FaUser />
+                  <Link to="/login" className="pl-2 ">
+                    Login
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="bottom-nav h-[10vh] flex border-b-2 border-white_border">
-          <div className="w-1/6"></div>
-          <ul className="flex-1 flex gap-20 justify-center items-center text-lg">
-            <Link to="/">
-              <li>Home</li>
-            </Link>
-            <Link to="/shop">
-              <li>Shop</li>
-            </Link>
-            <Link to="/wishlist">
-              <li>Wishlist</li>
-            </Link>
-            <Link to="/cart">
-              <li>Cart</li>
-            </Link>
-            <Link to="/orders">
-              <li>Orders</li>
-            </Link>
-          </ul>
-          <div className="w-1/6"></div>
         </div>
       </nav>
     </header>
