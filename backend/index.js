@@ -1,7 +1,13 @@
 const express = require("express");
-
+const connectDB = require("./config/db");
+const PORT = process.env.PORT || 5000;
 const app = express();
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000");
-});
+connectDB();
+
+app.listen(
+  PORT,
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
+);

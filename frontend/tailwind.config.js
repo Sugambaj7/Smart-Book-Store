@@ -21,6 +21,7 @@ export default {
         dull_grey: "#8f8f8f",
         custom_green: "#4BBF73",
         custom_black: "#cfcfcf",
+        alert_red: "#712B29",
       },
       borderColor: {
         border_green: "#4BBF73",
@@ -29,6 +30,7 @@ export default {
       backgroundColor: {
         custom_green: "#4BBF73",
         custom_white: "#F7F7F9",
+        custom_alert: "#F7DDDC",
       },
     },
   },
