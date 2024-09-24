@@ -7,45 +7,45 @@ const initialState = {
   success: false,
 };
 
-export const userRegister = createAsyncThunk(
-  "user/register",
+export const userLogin = createAsyncThunk(
+  "user/login",
   async (userData, { rejectWithValue }) => {
     try {
-      console.log(userData);
       const response = await axios.post(
-        "http://localhost:5001/user/register",
+        "http://localhost:5001/user/login",
         userData
       );
       return response?.data;
+      console.log(userData);
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
-const userRegisterSlice = createSlice({
-  name: "userRegister",
+const userLoginSlice = createSlice({
+  name: "userLogin",
   initialState,
   reducers: {
     clearError: (state) => {
       state.myerror = null;
     },
-    updateSuccess: (state) => {
+    clearSuccess: (state) => {
       state.success = false;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(userRegister.pending, (state) => {
+    builder.addCase(userLogin.pending, (state) => {
       state.loading = true;
       state.myerror = null;
       state.success = false;
     });
-    builder.addCase(userRegister.fulfilled, (state) => {
+    builder.addCase(userLogin.fulfilled, (state) => {
       state.loading = false;
       state.myerror = null;
       state.success = true;
     });
-    builder.addCase(userRegister.rejected, (state, action) => {
+    builder.addCase(userLogin.rejected, (state, action) => {
       state.loading = false;
       state.myerror = action.payload;
       state.success = false;
@@ -53,5 +53,5 @@ const userRegisterSlice = createSlice({
   },
 });
 
-export const { clearError, updateSuccess } = userRegisterSlice.actions;
-export default userRegisterSlice.reducer;
+export const { clearError, clearSuccess } = userLoginSlice.actions;
+export default userLoginSlice.reducer;

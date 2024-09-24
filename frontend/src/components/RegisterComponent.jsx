@@ -14,7 +14,9 @@ const RegisterComponent = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { loading, myerror, success } = useSelector((state) => state.user);
+  const { loading, myerror, success } = useSelector(
+    (state) => state.userRegister
+  );
 
   const dispatch = useDispatch();
 
@@ -68,10 +70,6 @@ const RegisterComponent = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000);
     }
   };
 
