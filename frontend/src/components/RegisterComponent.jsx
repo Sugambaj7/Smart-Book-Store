@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  userRegister,
+  clearError,
+  updateSuccess,
+} from "../features/user/userRegisterSlice";
 
 const RegisterComponent = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
   const [error, setError] = useState("");
+
+  const { loading, myerror, success } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  const handleFocus = () => {
+    dispatch(clearError());
+    dispatch(updateSuccess());
+  };
 
   const validate = () => {
     if (name === "") {
@@ -48,14 +62,16 @@ const RegisterComponent = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (validate()) {
-      // dispatch(register(name, email, password))
-      console.log("Form submitted");
-      setMessage("Form submitted successfully");
+      dispatch(userRegister({ name, email, password, confirmPassword }));
 
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
     }
   };
 
@@ -65,16 +81,24 @@ const RegisterComponent = () => {
       <div className="h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN UP</h2>
+          {myerror !== null ? (
+            <div className="w-full bg-custom_alert px-6 py-3 border border-custom_alert rounded mt-8">
+              <p className="text-alert_red text-sm tracking-wide">{myerror}</p>
+            </div>
+          ) : null}
+          {success && (
+            <div className="w-full bg-custom_green px-6 py-3 border border-custom_alert rounded mt-8">
+              <p className="text-white text-sm tracking-wide">
+                Registration Successfull!!!
+              </p>
+            </div>
+          )}
           {error && (
             <div className="w-full bg-custom_alert px-6 py-3 border border-custom_alert rounded mt-8">
               <p className="text-alert_red text-sm tracking-wide">{error}</p>
             </div>
           )}
-          {message && (
-            <div className="w-full bg-custom_green px-6 py-3 border border-custom_alert rounded mt-8">
-              <p className="text-white text-sm tracking-wide">{message}</p>
-            </div>
-          )}
+
           <div className="flex flex-col mt-4">
             <label htmlFor="name">Name</label>
             <input
@@ -84,6 +108,7 @@ const RegisterComponent = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-4">
@@ -95,6 +120,7 @@ const RegisterComponent = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-2">
@@ -105,6 +131,7 @@ const RegisterComponent = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-2">
@@ -115,6 +142,7 @@ const RegisterComponent = () => {
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col w-[20%] bg-black text-white mt-4">
