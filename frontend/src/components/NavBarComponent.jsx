@@ -63,7 +63,7 @@ const NavBarComponent = () => {
               {userInfo ? (
                 <div className="ml-12">
                   <p
-                    className="cursor-pointer flex text-custom_black"
+                    className="cursor-pointer flex text-custom_black hover:text-white"
                     onClick={() => setDropdown(!openDropdown)}
                   >
                     {userInfo.name}

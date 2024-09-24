@@ -22,7 +22,7 @@ const LoginComponent = () => {
     if (userInfo) {
       navigate(redirect);
     }
-  },[userInfo, navigate, redirect]);
+  }, [userInfo, navigate, redirect]);
 
   const handleFocus = () => {
     dispatch(clearError());
