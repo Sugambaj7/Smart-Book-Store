@@ -1,0 +1,7 @@
+.admin-dropdown::before {
+  position: absolute;
+  top: 0rem;
+  right: 2rem;
+  width: 25px;
+  background-color: green;
+}

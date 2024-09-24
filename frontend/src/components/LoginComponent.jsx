@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userLogin } from "../features/user/userLoginSlice";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin, clearError } from "../features/user/userLoginSlice";
 
 const LoginComponent = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +9,24 @@ const LoginComponent = () => {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { loading, myerror, success, userInfo } = useSelector(
+    (state) => state.userLogin
+  );
+
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  },[userInfo, navigate, redirect]);
+
+  const handleFocus = () => {
+    dispatch(clearError());
+  };
 
   const validate = () => {
     if (email === "") {
@@ -47,6 +65,11 @@ const LoginComponent = () => {
       <div className="h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN IN</h2>
+          {myerror !== null ? (
+            <div className="w-full bg-custom_alert px-6 py-3 border border-custom_alert rounded mt-8">
+              <p className="text-alert_red text-sm tracking-wide">{myerror}</p>
+            </div>
+          ) : null}
           {error && (
             <div className="w-full bg-custom_alert px-6 py-3 border border-custom_alert rounded mt-8">
               <p className="text-alert_red text-sm tracking-wide">{error}</p>
@@ -60,6 +83,7 @@ const LoginComponent = () => {
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-2">
@@ -70,6 +94,7 @@ const LoginComponent = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col w-[20%] bg-black text-white mt-4">

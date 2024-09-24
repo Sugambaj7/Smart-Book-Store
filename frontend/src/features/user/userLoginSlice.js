@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   myerror: null,
   success: false,
+  userInfo: null
 };
 
 export const userLogin = createAsyncThunk(
@@ -16,7 +17,6 @@ export const userLogin = createAsyncThunk(
         userData
       );
       return response?.data;
-      console.log(userData);
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -30,9 +30,6 @@ const userLoginSlice = createSlice({
     clearError: (state) => {
       state.myerror = null;
     },
-    clearSuccess: (state) => {
-      state.success = false;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(userLogin.pending, (state) => {
@@ -40,10 +37,11 @@ const userLoginSlice = createSlice({
       state.myerror = null;
       state.success = false;
     });
-    builder.addCase(userLogin.fulfilled, (state) => {
+    builder.addCase(userLogin.fulfilled, (state,action) => {
       state.loading = false;
       state.myerror = null;
       state.success = true;
+      state.userInfo = action.payload;
     });
     builder.addCase(userLogin.rejected, (state, action) => {
       state.loading = false;
@@ -53,5 +51,5 @@ const userLoginSlice = createSlice({
   },
 });
 
-export const { clearError, clearSuccess } = userLoginSlice.actions;
+export const { clearError } = userLoginSlice.actions;
 export default userLoginSlice.reducer;
