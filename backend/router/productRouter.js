@@ -42,5 +42,6 @@ productRouter.post(
   upload.single("image"),
   ProductInstance.createProduct
 );
+productRouter.get("/fetchProducts", ProductInstance.fetchProducts);
 
 module.exports = productRouter;

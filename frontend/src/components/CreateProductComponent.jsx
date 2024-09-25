@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import {
   createProduct,
   updateSuccess,
@@ -17,12 +17,15 @@ const CreateProductComponent = () => {
 
   const dispatch = useDispatch();
 
+
+
   const handleFocus = () => {
     dispatch(updateSuccess());
   };
 
   const { userInfo } = useSelector((state) => state.userLogin);
-  const { success } = useSelector((state) => state.productCreate);
+  const { success } = useSelector((state) => state.products);
+  // const {productList} = useSelector((state) => state.)
   // console.log(userInfo, "ko login xa tw");
 
   const validate = () => {
