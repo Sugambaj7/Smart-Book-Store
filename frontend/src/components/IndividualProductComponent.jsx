@@ -11,6 +11,7 @@ const IndividualProductComponent = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [doubleReview, setDoubleReview] = useState(false);
   const { product_id } = useParams();
   const { products, loading, error, success } = useSelector(
     (state) => state.products
@@ -23,7 +24,7 @@ const IndividualProductComponent = () => {
 
   useEffect(() => {
     dispatch(fetchIndividualProduct(product_id));
-  }, []);
+  }, [dispatch, product_id]);
 
   const quantityOptions = [];
   const availableQuantity = products ? products.countInStock : 0;
@@ -44,17 +45,35 @@ const IndividualProductComponent = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     const userInfo = userLogin.userInfo;
+
+    const hasReviewed = products.reviews
+      ? products.reviews.some((review) => review.user === userInfo._id)
+      : false;
+
+    if (hasReviewed) {
+      setDoubleReview(true);
+      setRating(0);
+      setComment("");
+      return;
+    }
+
     const reviewData = {
       rating: rating,
       comment: comment,
     };
 
     try {
-      const resultAction = await dispatch(
-        createProductReview({ product_id, reviewData, userInfo })
-      );
-      if (createProductReview.fulfilled.match(resultAction)) {
-        setReviewSuccess(true);
+      if (!doubleReview) {
+        const resultAction = await dispatch(
+          createProductReview({ product_id, reviewData, userInfo })
+        );
+        if (createProductReview.fulfilled.match(resultAction)) {
+          setReviewSuccess(true);
+          // Update the products state to include the new review
+          dispatch(fetchIndividualProduct(product_id));
+          setRating(0);
+          setComment("");
+        }
       }
     } catch (error) {
       console.error("Failed to create review: ", error);
@@ -75,6 +94,13 @@ const IndividualProductComponent = () => {
           </div>
           <div className="w-full flex flex-col">
             <h1 className="text-xl uppercase pt-4 pb-1">Reviews</h1>
+            {doubleReview && (
+              <div className="w-full bg-alert_red px-6 py-3 border border-custom_alert rounded mt-3">
+                <p className="text-white text-sm tracking-wide">
+                  You have already reviewd this product !!!
+                </p>
+              </div>
+            )}
             {reviewSuccess && (
               <div className="w-full bg-custom_green px-6 py-3 border border-custom_alert rounded mt-3">
                 <p className="text-white text-sm tracking-wide">
@@ -82,7 +108,12 @@ const IndividualProductComponent = () => {
                 </p>
               </div>
             )}
-            {products.reviews && products.reviews.length > 0 ? (
+            {!reviewSuccess &&
+            (!products.reviews || products.reviews.length === 0) ? (
+              <div className="w-full bg-custom_blue px-6 py-3 border border-custom_alert rounded mt-3">
+                <p className="text-black text-sm tracking-wide">No Reviews</p>
+              </div>
+            ) : (
               products.reviews.map((review) => (
                 <div
                   key={review._id}
@@ -94,10 +125,6 @@ const IndividualProductComponent = () => {
                   <p className="mt-2">{review.comment}</p>
                 </div>
               ))
-            ) : (
-              <div className="w-full bg-custom_blue px-6 py-3 border border-custom_alert rounded mt-3">
-                <p className="text-black text-sm tracking-wide">No Reviews</p>
-              </div>
             )}
             <div className="w-full">
               <h2 className="uppercase text-2xl px-2 mt-6">
@@ -113,7 +140,7 @@ const IndividualProductComponent = () => {
                       placeholder="Enter email"
                       value={rating}
                       onChange={(e) => setRating(e.target.value)}
-                      onFocus={() => setReviewSuccess(false)} 
+                      onFocus={() => setReviewSuccess(false)}
                       required
                     >
                       <option className="" value="">
@@ -203,11 +230,6 @@ const IndividualProductComponent = () => {
                   value={selectedQuantity}
                   onChange={(e) => setSelectedQuantity(e.target.value)}
                 >
-                  {/* {[...Array(products.countInStock).keys()].map((x) => (
-                    <option key={x + 1} value={x + 1}>
-                      {x + 1}
-                    </option>
-                  ))} */}
                   <option value="">Select</option>
                   {quantityOptions}
                 </select>
