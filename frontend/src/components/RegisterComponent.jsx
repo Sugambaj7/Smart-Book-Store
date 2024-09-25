@@ -18,14 +18,48 @@ const RegisterComponent = () => {
     (state) => state.userRegister
   );
 
+  const validate = () => {
+    if (name === "") {
+      setError("Username is not supposed to be empty");
+      return false;
+    } else if (!/^[a-zA-Z]*$/g.test(name)) {
+      setError("Invalid characters in username");
+      return false;
+    } else if (name.length < 8) {
+      setError("Username should be at least 8 characters long");
+      return false;
+    } else if (email === "") {
+      setError("Email is not supposed to be empty");
+      return false;
+    } else if (
+      !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(email)
+    ) {
+      setError("Invalid Email");
+      return false;
+    } else if (password === "") {
+      setError("Password is not supposed to be empty");
+      return false;
+    } else if (password.length < 8) {
+      setError("Password should be at least 8 characters long");
+      return false;
+    } else if (confirmPassword === "") {
+      setError("Confirm Password is not supposed to be empty");
+      return false;
+    } else if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    } else {
+      setError("");
+      return true;
+    }
+  };
+
   const dispatch = useDispatch();
 
   const handleFocus = () => {
     dispatch(clearError());
     dispatch(updateSuccess());
   };
-
- 
 
   const submitHandler = (e) => {
     e.preventDefault();

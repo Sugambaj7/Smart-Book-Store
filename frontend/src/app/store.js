@@ -15,7 +15,13 @@ const store = configureStore({
     products: productReducer,
   },
   preloadedState: {
-    userLogin: { userInfo: userInfoFromStorage },
+    userLogin: {
+      loading: false,
+      myerror: null,
+      success: false,
+      userInfo: null,
+      userInfo: userInfoFromStorage,
+    },
   },
 });
 

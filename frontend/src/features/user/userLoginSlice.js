@@ -1,13 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
-  loading: false,
-  myerror: null,
-  success: false,
-  userInfo: null,
-};
-
 export const userLogin = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
@@ -25,7 +18,12 @@ export const userLogin = createAsyncThunk(
 
 const userLoginSlice = createSlice({
   name: "userLogin",
-  initialState,
+  initialState: {
+    loading: false,
+    myerror: null,
+    success: false,
+    userInfo: null,
+  },
   reducers: {
     clearError: (state) => {
       state.myerror = null;

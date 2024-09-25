@@ -1,10 +1,9 @@
 import React from "react";
-// import "./admindropdown.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/user/userLoginSlice";
 import { useNavigate, Link } from "react-router-dom";
 
-const AdminDropdownComponent = () => {
+const UserDropdownComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,11 +15,8 @@ const AdminDropdownComponent = () => {
     <div className="bg-white flex flex-col absolute top-14 right-20 w-36 z-20 admin-dropdown mt-3 border border-border_login_input">
       <ul className="flex flex-col text-black ">
         <li className="px-6 py-3 text-sm">Profile</li>
-        <li className="px-6 py-3 text-sm">Users</li>
-        <li className="px-6 py-3 text-sm">
-          <Link to="/admin/productlist">Products</Link>
-        </li>
-        <li className="px-6 py-3 text-sm">Orders</li>
+        <li className="px-6 py-3 text-sm">MyOrders</li>
+        <li className="px-6 py-3 text-sm">Notifications</li>
         <li className="px-6 py-3 text-sm">
           <button
             className="uppercase"
@@ -35,4 +31,4 @@ const AdminDropdownComponent = () => {
   );
 };
 
-export default AdminDropdownComponent;
+export default UserDropdownComponent;

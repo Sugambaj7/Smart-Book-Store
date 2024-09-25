@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { IoMdArrowDropdown } from "react-icons/io";
 import AdminDropdownComponent from "./AdminDropdownComponent";
+import UserDropdownComponent from "./UserDropdownComponent";
 
 const NavBarComponent = () => {
   const [openDropdown, setDropdown] = useState(false);
@@ -13,9 +14,9 @@ const NavBarComponent = () => {
     (state) => state.userLogin
   );
 
-  if (userInfo) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${userInfo.token}`;
-  }
+  // if (userInfo) {
+  //   axios.defaults.headers.common["Authorization"] = `Bearer ${userInfo.token}`;
+  // }
 
   return (
     <header>
@@ -60,7 +61,33 @@ const NavBarComponent = () => {
                   Cart
                 </Link>
               </div>
-              {userInfo ? (
+
+              {!userInfo && (
+                <div className="flex ml-8 z-10">
+                  <FaUser className="text-custom_black hover:text-white" />
+                  <Link
+                    to="/login"
+                    className="pl-2 text-custom_black uppercase hover:text-white"
+                  >
+                    Login
+                  </Link>
+                </div>
+              )}
+
+              {userInfo && !userInfo.isAdmin && (
+                <div className="ml-12">
+                  <p
+                    className="cursor-pointer flex text-custom_black hover:text-white"
+                    onClick={() => setDropdown(!openDropdown)}
+                  >
+                    {userInfo.name}
+                    <IoMdArrowDropdown />
+                  </p>
+                  {openDropdown && <UserDropdownComponent />}
+                </div>
+              )}
+
+              {userInfo && userInfo.isAdmin && (
                 <div className="ml-12">
                   <p
                     className="cursor-pointer flex text-custom_black hover:text-white"
@@ -70,16 +97,6 @@ const NavBarComponent = () => {
                     <IoMdArrowDropdown />
                   </p>
                   {openDropdown && <AdminDropdownComponent />}
-                </div>
-              ) : (
-                <div className="flex ml-8 z-10">
-                  <FaUser className="text-custom_black hover:text-white" />
-                  <Link
-                    to="/login"
-                    className="pl-2 text-custom_black uppercase hover:text-white"
-                  >
-                    Login
-                  </Link>
                 </div>
               )}
             </div>

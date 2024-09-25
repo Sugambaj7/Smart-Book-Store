@@ -12,7 +12,7 @@ const LoginComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { loading, myerror, success, userInfo } = useSelector(
+  const { myerror, success, userInfo } = useSelector(
     (state) => state.userLogin
   );
 
