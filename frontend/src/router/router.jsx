@@ -4,6 +4,8 @@ import HomePage from "../pages/HomePage";
 import MainLayout from "../pages/MainLayout";
 import LoginComponent from "../components/LoginComponent";
 import RegisterComponent from "../components/RegisterComponent";
+import ProductListComponent from "../components/ProductListComponent";
+import CreateProductComponent from "../components/createProductComponent";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterComponent />,
+      },
+      {
+        path: "/admin/productlist",
+        element: <ProductListComponent />,
+      },
+      {
+        path: "/admin/createproduct",
+        element: <CreateProductComponent />,
       },
     ],
   },

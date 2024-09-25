@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  important: true,
   content: ["./src/**/*.{html,js,jsx}"],
   theme: {
     extend: {
@@ -26,11 +27,13 @@ export default {
       borderColor: {
         border_green: "#4BBF73",
         border_login_input: "#ced4da",
+        border_table: "#ddd",
       },
       backgroundColor: {
         custom_green: "#4BBF73",
         custom_white: "#F7F7F9",
         custom_alert: "#F7DDDC",
+        table_background: "#F2F2F2",
       },
     },
   },
