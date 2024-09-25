@@ -34,6 +34,7 @@ export default {
         custom_white: "#F7F7F9",
         custom_alert: "#F7DDDC",
         table_background: "#F2F2F2",
+        custom_blue: "#D2EBF5",
       },
     },
   },

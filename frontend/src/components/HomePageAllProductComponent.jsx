@@ -1,5 +1,5 @@
 import React from "react";
-import ProductCardComponent from "./ProjectCardComponent";
+import ProductCardComponent from "./ProductCardComponent";
 
 const HomePageAllProductComponent = () => {
   return (

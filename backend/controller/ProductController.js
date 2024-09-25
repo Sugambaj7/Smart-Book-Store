@@ -134,6 +134,21 @@ class ProductController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  fetchIndividualProduct = asyncHandler(async (req, res) => {
+    const { product_id } = req.params;
+    try {
+      const product = await Product.findById(product_id);
+      if (product) {
+        console.log("product from database", product);
+        res.status(200).json(product);
+      } else {
+        res.status(404).json({ message: "Product not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
 }
 
 module.exports = ProductController;

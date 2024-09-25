@@ -52,5 +52,6 @@ productRouter.delete(
   "/deleteProduct/:product_id",
   ProductInstance.deleteProduct
 );
+productRouter.get("/:product_id", ProductInstance.fetchIndividualProduct);
 
 module.exports = productRouter;

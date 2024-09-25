@@ -7,6 +7,7 @@ import RegisterComponent from "../components/RegisterComponent";
 import ProductListComponent from "../components/ProductListComponent";
 import CreateProductComponent from "../components/createProductComponent";
 import ProductEditComponent from "../components/ProductEditComponent";
+import IndividualProductComponent from "../components/IndividualProductComponent";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,11 @@ const router = createBrowserRouter([
       {
         path: "/admin/product/edit/:product_id",
         element: <ProductEditComponent />,
-      }
+      },
+      {
+        path: "/product/:product_id",
+        element: <IndividualProductComponent />,
+      },
     ],
   },
 ]);

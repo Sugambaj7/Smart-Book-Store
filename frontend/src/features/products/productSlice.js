@@ -73,6 +73,34 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5001/product/deleteProduct/${productId}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const fetchIndividualProduct = createAsyncThunk(
+  "products/fetchIndividualProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/product/${productId}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -133,23 +161,24 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(fetchIndividualProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(fetchIndividualProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+        state.success = true;
+      })
+      .addCase(fetchIndividualProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });
-
-export const deleteProduct = createAsyncThunk(
-  "products/deleteProduct",
-  async (productId, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:5001/product/deleteProduct/${productId}`
-      );
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
 
 export const { updateSuccess } = productSlice.actions;
 export default productSlice.reducer;
