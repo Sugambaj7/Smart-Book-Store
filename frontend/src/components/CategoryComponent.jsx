@@ -2,7 +2,7 @@ import React from "react";
 
 const CategoryComponent = () => {
   return (
-    <div className="h-full w-full p-11 flex flex-col">
+    <div className="h-full w-full p-11 flex flex-col bg-custom_white">
       <div className="w-full text-center mb-8">
         <h3 className="text-h2">Categories</h3>
       </div>
