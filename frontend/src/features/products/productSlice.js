@@ -45,6 +45,34 @@ export const fetchProductList = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ id, productData }, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", productData.name);
+      formData.append("price", productData.price);
+      formData.append("category", productData.category);
+      formData.append("countInStock", productData.countInStock);
+      formData.append("description", productData.description);
+      formData.append("image", productData.image);
+
+      const response = await axios.put(
+        `http://localhost:5001/product/updateProduct/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -87,6 +115,25 @@ const productSlice = createSlice({
       .addCase(fetchProductList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        state.success = true;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });

@@ -62,9 +62,12 @@ const ProductListComponent = () => {
                   </td>
                   <td classname="w-[19%]" key={product._id}>
                     <div className="w-full flex justify-center">
-                      <button className="bg-white px-1 py-1">
-                        <FaRegEdit className="text-xl" />
-                      </button>
+                      <Link to={`/admin/product/edit/${product._id}`}>
+                        <button className="bg-white px-1 py-1">
+                          <FaRegEdit className="text-xl" />
+                        </button>
+                      </Link>
+
                       <button className="bg-red-500 px-1 py-1">
                         <MdOutlineDelete className="text-xl text-white" />
                       </button>
