@@ -115,6 +115,25 @@ class ProductController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  deleteProduct = asyncHandler(async (req, res) => {
+    const { product_id } = req.params;
+
+    try {
+      const product = await Product.findById(product_id);
+
+      if (!product) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
+
+      await Product.findByIdAndDelete(product_id);
+      res.status(200).json({ message: "Product deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
 }
 
 module.exports = ProductController;

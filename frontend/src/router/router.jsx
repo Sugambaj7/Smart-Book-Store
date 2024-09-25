@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       {
         path: "/admin/product/edit/:product_id",
         element: <ProductEditComponent />,
-      },
+      }
     ],
   },
 ]);

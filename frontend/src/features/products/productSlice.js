@@ -109,7 +109,6 @@ const productSlice = createSlice({
       .addCase(fetchProductList.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
-        state.success = true;
         state.error = null;
       })
       .addCase(fetchProductList.rejected, (state, action) => {
@@ -137,6 +136,20 @@ const productSlice = createSlice({
       });
   },
 });
+
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5001/product/deleteProduct/${productId}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
 
 export const { updateSuccess } = productSlice.actions;
 export default productSlice.reducer;

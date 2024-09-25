@@ -48,5 +48,9 @@ productRouter.put(
   upload.single("image"),
   ProductInstance.updateProduct
 );
+productRouter.delete(
+  "/deleteProduct/:product_id",
+  ProductInstance.deleteProduct
+);
 
 module.exports = productRouter;
