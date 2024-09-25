@@ -101,6 +101,27 @@ export const fetchIndividualProduct = createAsyncThunk(
   }
 );
 
+export const createProductReview = createAsyncThunk(
+  "products/createProductReview",
+  async ({ product_id, reviewData, userInfo }, { rejectWithValue }) => {
+    try {
+      console.log(
+        product_id,
+        reviewData,
+        userInfo,
+        "productSlice bata  aako review k xa"
+      );
+      const response = await axios.post(
+        `http://localhost:5001/product/review/${product_id}`,
+        { ...reviewData, userInfo }
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -176,6 +197,19 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+
+      .addCase(createProductReview.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProductReview.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(createProductReview.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

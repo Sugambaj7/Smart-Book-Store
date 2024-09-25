@@ -49,12 +49,8 @@ const ProductCardComponent = () => {
                   <Rating value={product.rating} />
                 </span>
                 <span className="text-xl font-semibold">
-                  {product.reviews.length > 0 ? (
-                    product.reviews.map((review, index) => (
-                      <p key={index}>
-                        <Rating value={review.rating} />
-                      </p>
-                    ))
+                  {product.reviews.length ? (
+                    <p className="text-sm">{product.reviews.length} Reviews</p>
                   ) : (
                     <p className="text-sm">No reviews yet</p>
                   )}

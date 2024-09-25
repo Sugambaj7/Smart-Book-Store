@@ -149,6 +149,42 @@ class ProductController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  createProductReview = asyncHandler(async (req, res) => {
+    const { product_id } = req.params;
+    const { userInfo, ...reviewData } = req.body;
+
+    console.log(userInfo, reviewData, "reviewData from backend controller");
+
+    const rating = reviewData.rating;
+    const comment = reviewData.comment;
+    const user_id = userInfo._id;
+    const user_name = userInfo.name;
+
+    try {
+      const product = await Product.findById(product_id);
+      if (product) {
+        const review = {
+          rating: Number(rating),
+          comment: comment,
+          user: user_id,
+          name: user_name,
+        };
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        product.rating =
+          product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+          product.reviews.length;
+
+        await product.save();
+        res.status(201).json({ message: "Review added" });
+      } else {
+        res.status(404).json({ message: "Product not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
 }
 
 module.exports = ProductController;
