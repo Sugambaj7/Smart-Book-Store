@@ -8,6 +8,7 @@ import ProductListComponent from "../components/ProductListComponent";
 import CreateProductComponent from "../components/createProductComponent";
 import ProductEditComponent from "../components/ProductEditComponent";
 import IndividualProductComponent from "../components/IndividualProductComponent";
+import CartComponent from "../components/CartComponent";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,14 @@ const router = createBrowserRouter([
         path: "/product/:product_id",
         element: <IndividualProductComponent />,
       },
+      {
+        path: "/cart",
+        element: <CartComponent />,
+      },
+      {
+        path: "/cart/:product_id",
+        element: <CartComponent />,
+      }
     ],
   },
 ]);

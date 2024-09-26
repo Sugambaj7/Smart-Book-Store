@@ -140,7 +140,7 @@ class ProductController {
     try {
       const product = await Product.findById(product_id);
       if (product) {
-        console.log("product from database", product);
+        console.log("product from databasssssssssse", product);
         res.status(200).json(product);
       } else {
         res.status(404).json({ message: "Product not found" });
@@ -171,10 +171,20 @@ class ProductController {
           name: user_name,
         };
         product.reviews.push(review);
+
+        //calculation of number of reviews as reviews are pushed number of reviews increases
         product.numReviews = product.reviews.length;
-        product.rating =
-          product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-          product.reviews.length;
+
+        //initially sum of rating is zero
+        let sumOfRatings = 0;
+
+        //Loop through each review and add its rating to the sum of rating
+        for (let i = 0; i < product.reviews.length; i++) {
+          sumOfRatings += product.reviews[i].rating;
+        }
+
+        //calculate the average rating
+        product.rating = sumOfRatings / product.reviews.length;
 
         await product.save();
         res.status(201).json({ message: "Review added" });

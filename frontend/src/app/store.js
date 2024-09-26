@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userRegisterReducer from "../features/user/userRegisterSlice";
 import userLoginReducer from "../features/user/userLoginSlice";
 import productReducer from "../features/products/productSlice";
+import cartReducer from "../features/cart/cartSlice";
 
 // Retrieve user info from local storage
 const userInfoFromStorage = localStorage.getItem("userInfo")
@@ -13,6 +14,7 @@ const store = configureStore({
     userRegister: userRegisterReducer,
     userLogin: userLoginReducer,
     products: productReducer,
+    cart: cartReducer,
   },
   preloadedState: {
     userLogin: {
