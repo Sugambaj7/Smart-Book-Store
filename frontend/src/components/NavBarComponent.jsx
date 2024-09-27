@@ -10,6 +10,7 @@ import UserDropdownComponent from "./UserDropdownComponent";
 
 const NavBarComponent = () => {
   const [openDropdown, setDropdown] = useState(false);
+  const [keyword, setKeyword] = useState("");
   const { loading, myerror, success, userInfo } = useSelector(
     (state) => state.userLogin
   );
@@ -17,6 +18,10 @@ const NavBarComponent = () => {
   // if (userInfo) {
   //   axios.defaults.headers.common["Authorization"] = `Bearer ${userInfo.token}`;
   // }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <header>
@@ -29,6 +34,7 @@ const NavBarComponent = () => {
             <form
               className="flex items-center justify-start h-full w-[40%]"
               action=""
+              onSubmit={handleSubmit}
               method="post"
             >
               <div className="h-full flex pl-20 ">
@@ -38,15 +44,18 @@ const NavBarComponent = () => {
                     type="text"
                     placeholder="Search book..."
                     name="search"
+                    onChange={(e) => setKeyword(e.target.value)}
                   />
                 </div>
                 <div className="h-full flex items-center ml-2">
                   <div className="flex items-center px-3 py-4 h-5 text-center bg-footer_black border-2 border-border_green hover:bg-custom_green ">
-                    <input
-                      className="text-white"
-                      type="button"
-                      value="Search"
-                    />
+                    <Link to={`/search?keyword=${keyword}`}>
+                      <input
+                        className="text-white"
+                        type="submit"
+                        value="Search"
+                      />
+                    </Link>
                   </div>
                 </div>
               </div>

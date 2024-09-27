@@ -134,19 +134,19 @@ export const recommendProducts = createAsyncThunk(
   }
 );
 
-export const fetchTopRatedProducts = createAsyncThunk(
-  "products/fetchTopRatedProducts",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5001/recommend/top_rated_products"
-      );
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
+// export const fetchTopRatedProducts = createAsyncThunk(
+//   "products/fetchTopRatedProducts",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(
+//         "http://localhost:5001/recommend/top_rated_products"
+//       );
+//       return response?.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response?.data?.message || error.message);
+//     }
+//   }
+// );
 
 export const recommendPersonalizedProducts = createAsyncThunk(
   "products/recommendPersonalizedProducts",
@@ -155,6 +155,21 @@ export const recommendPersonalizedProducts = createAsyncThunk(
     try {
       const response = await axios.get(
         `http://localhost:5001/recommend/recommendUserBasedProducts/${user_id}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const fetchProductsByName = createAsyncThunk(
+  "products/fetchProductsByName",
+  async (name, { rejectWithValue }) => {
+    // console.log(name);
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/product/fetchproductsByName?name=${name}`
       );
       return response?.data;
     } catch (error) {
@@ -277,10 +292,23 @@ const productSlice = createSlice({
           "ma database bata personalized recommended vyera aaako"
         );
         state.loading = false;
-        state.recommendPersonalizeProducts = (action.payload.products);
+        state.recommendPersonalizeProducts = action.payload.products;
         state.error = null;
       })
       .addCase(recommendPersonalizedProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchProductsByName.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductsByName.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.products = action.payload;
+      })
+      .addCase(fetchProductsByName.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

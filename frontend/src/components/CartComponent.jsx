@@ -12,6 +12,7 @@ const CartComponent = () => {
 
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.userLogin);
   const navigate = useNavigate();
 
   console.log(cartItems, "use selector cart");
@@ -83,11 +84,15 @@ const CartComponent = () => {
               </p>
             </div>
             <div className="py-3 px-8">
-              <button className="w-full bg-black text-white text-center py-1 uppercase">
-                <Link to="/shipping">
-                  <p className="py-2 text-sm">Proceed to checkout</p>
-                </Link>
-              </button>
+              {userInfo ? (
+                <button className="w-full bg-black text-white text-center py-1 uppercase">
+                  <Link to="/shipping">
+                    <p className="py-2 text-sm">Proceed to checkout</p>
+                  </Link>
+                </button>
+              ) : (
+                <p className="py-2 text-md text-red-500">Sign in to checkout !!!</p>
+              )}
             </div>
           </div>
         </div>

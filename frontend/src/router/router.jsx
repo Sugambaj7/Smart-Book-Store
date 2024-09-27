@@ -14,6 +14,7 @@ import PaymentComponent from "../components/PaymentComponent";
 import PlaceOrderComponent from "../components/PlaceOrderComponent";
 import OrderViewComponent from "../components/OrderViewComponent";
 import RecommendedProducts from "../components/recommendedProducts";
+import SearchResultComponent from "../components/SearchResultComponent";
 
 const router = createBrowserRouter([
   {
@@ -79,7 +80,11 @@ const router = createBrowserRouter([
       {
         path: "/recommendedProducts",
         element: <RecommendedProducts />,
-      }
+      },
+      {
+        path: "/search",
+        element: <SearchResultComponent />,
+      },
     ],
   },
 ]);

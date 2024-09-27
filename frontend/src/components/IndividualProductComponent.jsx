@@ -18,6 +18,7 @@ const IndividualProductComponent = () => {
   );
 
   const userLogin = useSelector((state) => state.userLogin);
+  const userInfo = userLogin.userInfo;
   console.log(rating, comment, "rating rw comment k xa");
 
   const dispatch = useDispatch();
@@ -44,7 +45,11 @@ const IndividualProductComponent = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const userInfo = userLogin.userInfo;
+
+    if (!userInfo) {
+      console.error("User not logged in");
+      return;
+    }
 
     const hasReviewed = products.reviews
       ? products.reviews.some((review) => review.user === userInfo._id)
@@ -97,7 +102,7 @@ const IndividualProductComponent = () => {
             {doubleReview && (
               <div className="w-full bg-alert_red px-6 py-3 border border-custom_alert rounded mt-3">
                 <p className="text-white text-sm tracking-wide">
-                  You have already reviewd this product !!!
+                  You have already reviewed this product !!!
                 </p>
               </div>
             )}
@@ -130,7 +135,7 @@ const IndividualProductComponent = () => {
               <h2 className="uppercase text-2xl px-2 mt-6">
                 Write a customer review
               </h2>
-              {userLogin.userInfo && userLogin.userInfo.isAdmin == false ? (
+              {userInfo && userInfo.isAdmin === false ? (
                 <form action="" className="px-2 py-2" onSubmit={submitHandler}>
                   <div className="flex flex-col mt-1">
                     <label htmlFor="">Rating</label>
@@ -237,7 +242,7 @@ const IndividualProductComponent = () => {
               </form>
             </div>
             <div className="w-full p-2">
-              {userLogin.userInfo.isAdmin == true ? (
+              {userInfo && userInfo.isAdmin ? (
                 <p>Sorry! You are not allowed to add to cart...</p>
               ) : (
                 <button

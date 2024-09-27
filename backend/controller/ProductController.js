@@ -59,6 +59,25 @@ class ProductController {
     }
   });
 
+  fetchByName = asyncHandler(async (req, res) => {
+    const { name } = req.query;
+    try {
+      console.log(name, "k xa name ma ");
+      const products = await Product.find({
+        name: { $regex: new RegExp(name, "i") }, // Case-insensitive search
+      });
+      if (products.length > 0) {
+        res.status(200).json(products);
+      } else {
+        res
+          .status(404)
+          .json({ message: "No products found with the given name" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   updateProduct = asyncHandler(async (req, res) => {
     const { product_id } = req.params;
     const { name, price, category, countInStock, description } = req.body;
