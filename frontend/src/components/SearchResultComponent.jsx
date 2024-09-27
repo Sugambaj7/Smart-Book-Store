@@ -22,7 +22,7 @@ const SearchResultComponent = () => {
       <div className="w-[10%]"></div>
       <div className="w-[80%] flex flex-col">
         <h1 className="text-3xl">Search Results:</h1>
-        <div className="mt-10">
+        <div className="mt-10 flex">
           {success && products.length > 0 ? products.map((product) => <div
               className="product-card mt-1 mb-8 ml-4 w-64 h-auto flex flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded p-4"
               key={product.id}

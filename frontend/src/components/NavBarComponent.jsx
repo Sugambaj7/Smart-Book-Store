@@ -11,6 +11,7 @@ import UserDropdownComponent from "./UserDropdownComponent";
 const NavBarComponent = () => {
   const [openDropdown, setDropdown] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [validationMessage, setValidationMessage] = useState("");
   const { loading, myerror, success, userInfo } = useSelector(
     (state) => state.userLogin
   );
@@ -21,12 +22,19 @@ const NavBarComponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (keyword.trim() === "") {
+      setValidationMessage("Search input cannot be empty.");
+    } else {
+      setValidationMessage("");
+      // Proceed with the search
+      window.location.href = `/search?keyword=${keyword}`;
+    }
   };
 
   return (
     <header>
       <nav className="navbar">
-        <div className="top-nav  bg-footer_black h-[11vh] ">
+        <div className="top-nav bg-footer_black h-[11vh]">
           <div className="flex items-center h-full w-full relative">
             <h1 className="text-h3 pl-24 font-semibold py-3 text-white w-[20%]">
               <Link to="/">Smart Book Store</Link>
@@ -37,7 +45,7 @@ const NavBarComponent = () => {
               onSubmit={handleSubmit}
               method="post"
             >
-              <div className="h-full flex pl-20 ">
+              <div className="h-full flex pl-20">
                 <div className="h-full flex items-center">
                   <input
                     className="px-4 py-4 h-9 outline-none"
@@ -48,18 +56,17 @@ const NavBarComponent = () => {
                   />
                 </div>
                 <div className="h-full flex items-center ml-2">
-                  <div className="flex items-center px-3 py-4 h-5 text-center bg-footer_black border-2 border-border_green hover:bg-custom_green ">
-                    <Link to={`/search?keyword=${keyword}`}>
-                      <input
-                        className="text-white"
-                        type="submit"
-                        value="Search"
-                      />
-                    </Link>
+                  <div className="flex items-center px-3 py-4 h-5 text-center bg-footer_black border-2 border-border_green hover:bg-custom_green">
+                    <input
+                      className="text-white cursor-pointer"
+                      type="submit"
+                      value="Search"
+                    />
                   </div>
                 </div>
               </div>
             </form>
+            {validationMessage && alert(validationMessage)}
             <div className="h-full flex items-center uppercase w-[40%] relative">
               {userInfo && userInfo.isAdmin === false && (
                 <div className="flex">

@@ -61,19 +61,23 @@ class ProductController {
 
   fetchByName = asyncHandler(async (req, res) => {
     const { name } = req.query;
-    try {
-      console.log(name, "k xa name ma ");
-      const products = await Product.find({
-        name: { $regex: new RegExp(name, "i") }, // Case-insensitive search
-      });
-      if (products.length > 0) {
-        res.status(200).json(products);
-      } else {
-        res
-          .status(404)
-          .json({ message: "No products found with the given name" });
+    if (name !== null) {
+      try {
+        console.log(name, "k xa name ma ");
+        const products = await Product.find({
+          name: { $regex: new RegExp(name, "i") }, // Case-insensitive search
+        });
+        if (products.length > 0) {
+          res.status(200).json(products);
+        } else {
+          res
+            .status(404)
+            .json({ message: "No products found with the given name" });
+        }
+      } catch (error) {
+        res.status(400).json({ message: error.message });
       }
-    } catch (error) {
+    } else {
       res.status(400).json({ message: error.message });
     }
   });
