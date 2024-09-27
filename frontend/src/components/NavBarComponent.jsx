@@ -52,15 +52,28 @@ const NavBarComponent = () => {
               </div>
             </form>
             <div className="h-full flex items-center uppercase w-[20%] relative">
-              <div className="flex">
-                <FaShoppingCart className="text-custom_black hover:text-white" />
-                <Link
-                  to="/cart"
-                  className="pl-2 text-custom_black uppercase hover:text-white"
-                >
-                  Cart
-                </Link>
-              </div>
+              {userInfo && userInfo.isAdmin === false && (
+                <div className="flex">
+                  <FaShoppingCart className="text-custom_black hover:text-white" />
+                  <Link
+                    to="/cart"
+                    className="pl-2 text-custom_black uppercase hover:text-white"
+                  >
+                    Cart
+                  </Link>
+                </div>
+              )}
+              {!userInfo && (
+                <div className="flex">
+                  <FaShoppingCart className="text-custom_black hover:text-white" />
+                  <Link
+                    to="/cart"
+                    className="pl-2 text-custom_black uppercase hover:text-white"
+                  >
+                    Cart
+                  </Link>
+                </div>
+              )}
 
               {!userInfo && (
                 <div className="flex ml-8 z-10">

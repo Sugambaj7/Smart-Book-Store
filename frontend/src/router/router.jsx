@@ -9,6 +9,10 @@ import CreateProductComponent from "../components/createProductComponent";
 import ProductEditComponent from "../components/ProductEditComponent";
 import IndividualProductComponent from "../components/IndividualProductComponent";
 import CartComponent from "../components/CartComponent";
+import ShippingComponent from "../components/ShippingComponent";
+import PaymentComponent from "../components/PaymentComponent";
+import PlaceOrderComponent from "../components/PlaceOrderComponent";
+import OrderViewComponent from "../components/OrderViewComponent";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +58,22 @@ const router = createBrowserRouter([
       {
         path: "/cart/:product_id",
         element: <CartComponent />,
+      },
+      {
+        path: "/shipping",
+        element: <ShippingComponent />,
+      },
+      {
+        path: "/payment",
+        element: <PaymentComponent />,
+      },
+      {
+        path: "/placeorder",
+        element: <PlaceOrderComponent />,
+      },
+      {
+        path: "/order/:user_id",
+        element: <OrderViewComponent />,
       }
     ],
   },

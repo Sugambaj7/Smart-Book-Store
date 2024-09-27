@@ -185,7 +185,8 @@ const IndividualProductComponent = () => {
                 </form>
               ) : (
                 <p className="mt-4 text-red-400">
-                  Please sign in and checkout to give reviews and ratings
+                  Please sign in and checkout to give reviews and ratings and
+                  you must be user
                 </p>
               )}
             </div>
@@ -236,14 +237,18 @@ const IndividualProductComponent = () => {
               </form>
             </div>
             <div className="w-full p-2">
-              <button
-                type="submit"
-                className="bg-black text-white p-2 w-full"
-                disabled={products.countInStock === 0}
-                onClick={addToCartHandler}
-              >
-                Add to Cart
-              </button>
+              {userLogin.userInfo.isAdmin == true ? (
+                <p>Sorry! You are not allowed to add to cart...</p>
+              ) : (
+                <button
+                  type="submit"
+                  className="bg-black text-white p-2 w-full"
+                  disabled={products.countInStock === 0}
+                  onClick={addToCartHandler}
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
           </div>
         </div>

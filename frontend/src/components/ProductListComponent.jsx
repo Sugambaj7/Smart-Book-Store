@@ -57,7 +57,7 @@ const ProductListComponent = () => {
               </tr>
             </thead>
             <tbody className="w-full">
-              {products.map((product) => (
+              {(products || []).map((product) => (
                 <tr key={product._id} className="w-full">
                   <td className="w-[5%]">
                     <p className="text-center px-2 py-3">{product._id}</p>

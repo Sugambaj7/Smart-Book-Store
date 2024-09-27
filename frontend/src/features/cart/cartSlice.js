@@ -6,9 +6,16 @@ const cartItemsFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
+const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
+  ? JSON.parse(localStorage.getItem("shippingAddress"))
+  : {};
+
+// const paymentMethodFromStorage = localStorage.getItem("Payment Method");
+
 const initialState = {
   cartItems: cartItemsFromStorage,
-  shippingAddress: {},
+  shippingAddress: shippingAddressFromStorage,
+  paymentMethod: "",
   loading: false,
   error: null,
   success: false,
@@ -37,6 +44,24 @@ const cartSlice = createSlice({
         (item) => item._id !== action.payload
       );
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
+    clearMyCart: (state) => {
+      state.cartItems = [];
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
+    saveShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+      localStorage.setItem(
+        "shippingAddress",
+        JSON.stringify(state.shippingAddress)
+      );
+    },
+    savePaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload;
+      // localStorage.setItem(
+      //   "Payment Method",
+      //   JSON.stringify(state.paymentMethod)
+      // );
     },
   },
   extraReducers: (builder) => {
@@ -74,5 +99,10 @@ const cartSlice = createSlice({
   },
 });
 
-export const { deleteFromCart } = cartSlice.actions;
+export const {
+  deleteFromCart,
+  saveShippingAddress,
+  savePaymentMethod,
+  clearMyCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

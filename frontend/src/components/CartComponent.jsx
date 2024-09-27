@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineDelete } from "react-icons/md";
 import { addToCart } from "../features/cart/cartSlice";
@@ -84,7 +84,9 @@ const CartComponent = () => {
             </div>
             <div className="py-3 px-8">
               <button className="w-full bg-black text-white text-center py-1 uppercase">
-                <p className="py-2 text-sm">Proceed to checkout</p>
+                <Link to="/shipping">
+                  <p className="py-2 text-sm">Proceed to checkout</p>
+                </Link>
               </button>
             </div>
           </div>
