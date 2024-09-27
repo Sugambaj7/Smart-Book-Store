@@ -54,5 +54,6 @@ productRouter.delete(
 );
 productRouter.get("/:product_id", ProductInstance.fetchIndividualProduct);
 productRouter.post("/review/:product_id", ProductInstance.createProductReview);
+productRouter.get("/", ProductInstance.recommendProducts);
 
 module.exports = productRouter;

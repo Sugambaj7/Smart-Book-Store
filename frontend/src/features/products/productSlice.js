@@ -122,6 +122,20 @@ export const createProductReview = createAsyncThunk(
   }
 );
 
+export const recommendProducts = createAsyncThunk(
+  "products/recommendProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5001/recommend"
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -208,6 +222,20 @@ const productSlice = createSlice({
         state.success = true;
       })
       .addCase(createProductReview.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(recommendProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(recommendProducts.fulfilled, (state, action) => {
+        console.log(action.payload, "ma database bata recommended vyera aaako");
+        state.loading = false;
+        state.products = action.payload.products;
+        state.error = null;
+      })
+      .addCase(recommendProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -52,7 +52,6 @@ class ProductController {
   fetchProducts = asyncHandler(async (req, res) => {
     try {
       const products = await Product.find({});
-      console.log("products from database", products);
       res.status(200).json(products);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -63,9 +62,6 @@ class ProductController {
     const { product_id } = req.params;
     const { name, price, category, countInStock, description } = req.body;
     const image = req.file;
-
-    // console.log(image, "backend ma image");
-    // console.log(product_id, req.body, "backend ma body");
 
     if (
       !name ||
@@ -130,7 +126,6 @@ class ProductController {
       await Product.findByIdAndDelete(product_id);
       res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-      console.error("Error deleting product:", error);
       res.status(400).json({ message: error.message });
     }
   });
@@ -140,7 +135,6 @@ class ProductController {
     try {
       const product = await Product.findById(product_id);
       if (product) {
-        console.log("product from databasssssssssse", product);
         res.status(200).json(product);
       } else {
         res.status(404).json({ message: "Product not found" });
@@ -153,8 +147,6 @@ class ProductController {
   createProductReview = asyncHandler(async (req, res) => {
     const { product_id } = req.params;
     const { userInfo, ...reviewData } = req.body;
-
-    console.log(userInfo, reviewData, "reviewData from backend controller");
 
     const rating = reviewData.rating;
     const comment = reviewData.comment;
@@ -172,18 +164,13 @@ class ProductController {
         };
         product.reviews.push(review);
 
-        //calculation of number of reviews as reviews are pushed number of reviews increases
         product.numReviews = product.reviews.length;
 
-        //initially sum of rating is zero
         let sumOfRatings = 0;
-
-        //Loop through each review and add its rating to the sum of rating
         for (let i = 0; i < product.reviews.length; i++) {
           sumOfRatings += product.reviews[i].rating;
         }
 
-        //calculate the average rating
         product.rating = sumOfRatings / product.reviews.length;
 
         await product.save();
@@ -195,6 +182,60 @@ class ProductController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  recommendProducts = asyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({});
+      const sortedProducts = this.mergeSort(products, "name"); // Use 'this' to call the method
+      console.log(sortedProducts, "mero sorted product from database");
+      res.json({ products: sortedProducts });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  mergeSort(arr, sortBy) {
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    const middle = Math.floor(arr.length / 2);
+    const leftHalf = arr.slice(0, middle);
+    const rightHalf = arr.slice(middle);
+
+    const sortedLeft = this.mergeSort(leftHalf, sortBy); // Use 'this' to call the method
+    const sortedRight = this.mergeSort(rightHalf, sortBy); // Use 'this' to call the method
+
+    return this.merge(sortedLeft, sortedRight, sortBy); // Use 'this' to call the method
+  }
+
+  merge(leftArr, rightArr, sortBy) {
+    let sortedArr = [];
+    let leftIdx = 0;
+    let rightIdx = 0;
+
+    while (leftIdx < leftArr.length && rightIdx < rightArr.length) {
+      if (leftArr[leftIdx][sortBy] <= rightArr[rightIdx][sortBy]) {
+        sortedArr.push(leftArr[leftIdx]);
+        leftIdx++;
+      } else {
+        sortedArr.push(rightArr[rightIdx]);
+        rightIdx++;
+      }
+    }
+
+    while (leftIdx < leftArr.length) {
+      sortedArr.push(leftArr[leftIdx]);
+      leftIdx++;
+    }
+
+    while (rightIdx < rightArr.length) {
+      sortedArr.push(rightArr[rightIdx]);
+      rightIdx++;
+    }
+
+    return sortedArr;
+  }
 }
 
 module.exports = ProductController;

@@ -11,5 +11,6 @@ webRouter.get("/", function (req, res) {
 webRouter.use("/user", userRouter);
 webRouter.use("/product", productRouter);
 webRouter.use("/order", orderRouter);
+webRouter.use("/recommend", productRouter);
 
 module.exports = webRouter;
