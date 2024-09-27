@@ -8,6 +8,8 @@ import { recommendProducts } from "../features/products/productSlice";
 import ProductCardComponent from "./ProductCardComponent";
 // import { changePlaceOrderStatus } from "../features/order/orderSlice";
 
+
+
 const OrderViewComponent = () => {
   const dispatch = useDispatch();
 
@@ -21,7 +23,10 @@ const OrderViewComponent = () => {
     // dispatch(changePlaceOrderStatus());
     dispatch(listMyRecentOrders(user_id));
     dispatch(clearMyCart());
+    //sorted in ascending order
     dispatch(recommendProducts());
+    console.log(user_id, "user_id ma k aaako xa order view component");
+    dispatch(recommendPersonalizedProducts(user_id));
   }, [success, dispatch, user_id]);
 
   const { userInfo } = useSelector((state) => state.userLogin);
@@ -134,6 +139,13 @@ const OrderViewComponent = () => {
         <div className="w-[70%] flex flex-col">
           <h2 className="text-3xl text-black">You May Also Like</h2>
           <ProductCardComponent />
+        </div>
+        <div className="w-[15%]"></div>
+      </div>
+      <div className="flex bg-red-500">
+        <div className="w-[15%]"></div>
+        <div className="w-[70%] flex flex-col">
+          <h2 className="text-3xl text-black">Personalized Recommendations</h2>
         </div>
         <div className="w-[15%]"></div>
       </div>

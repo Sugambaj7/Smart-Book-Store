@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const validator = require("validator");
 
@@ -235,6 +236,156 @@ class ProductController {
     }
 
     return sortedArr;
+  }
+
+  recommendTopRatedProducts = asyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({});
+      const sortedProducts = this.mergeSort(products, "name");
+      console.log(sortedProducts, "mero sorted product from database");
+      res.json({ products: sortedProducts });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  recommendUserBasedProducts = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+      const users = await User.find({});
+      const products = await Product.find({});
+
+      const userRatings = {};
+      users.forEach((user) => {
+        userRatings[user._id] = {};
+        products.forEach((product) => {
+          product.reviews.forEach((review) => {
+            if (review.user.toString() === user._id.toString()) {
+              userRatings[user._id][product._id] = review.rating;
+            }
+          });
+        });
+      });
+
+      console.log("User Ratings:", userRatings);
+
+      const targetUserRatings = userRatings[userId];
+      if (!targetUserRatings) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      console.log("Target User Ratings:", targetUserRatings);
+
+      const similarities = users
+        .filter((user) => user._id.toString() !== userId)
+        .map((user) => {
+          const similarity = this.calculateSimilarity(
+            targetUserRatings,
+            userRatings[user._id]
+          );
+          return {
+            userId: user._id,
+            similarity,
+          };
+        })
+        .sort((a, b) => b.similarity - a.similarity);
+
+      console.log("Similarities:", similarities);
+
+      const topSimilarUsers = similarities.slice(0, 5);
+
+      console.log("Top Similar Users:", topSimilarUsers);
+
+      const recommendations = {};
+      topSimilarUsers.forEach(({ userId: similarUserId, similarity }) => {
+        const similarUserRatings = userRatings[similarUserId];
+        for (const productId in similarUserRatings) {
+          if (!targetUserRatings[productId]) {
+            if (!recommendations[productId]) {
+              recommendations[productId] = { total: 0, count: 0 };
+            }
+            recommendations[productId].total +=
+              similarUserRatings[productId] * similarity;
+            recommendations[productId].count += similarity;
+          }
+        }
+      });
+
+      console.log("Recommendations:", recommendations);
+
+      const recommendedProducts = Object.keys(recommendations)
+        .map((productId) => ({
+          productId,
+          score:
+            recommendations[productId].total / recommendations[productId].count,
+        }))
+        .sort((a, b) => b.score - a.score)
+        .map((rec) =>
+          products.find((product) => product._id.toString() === rec.productId)
+        );
+
+      console.log("Recommended Products:", recommendedProducts);
+
+      res.json({ products: recommendedProducts });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  calculateSimilarity(userRatings1, userRatings2) {
+    const commonRatings = [];
+    for (const productId in userRatings1) {
+      if (userRatings2[productId]) {
+        commonRatings.push({
+          rating1: userRatings1[productId],
+          rating2: userRatings2[productId],
+        });
+      }
+    }
+
+    console.log("Common Ratings:", commonRatings);
+
+    if (commonRatings.length === 0) return 0;
+
+    const sum1 = commonRatings.reduce((sum, r) => sum + r.rating1, 0);
+    const sum2 = commonRatings.reduce((sum, r) => sum + r.rating2, 0);
+
+    const sum1Sq = commonRatings.reduce((sum, r) => sum + r.rating1 ** 2, 0);
+    const sum2Sq = commonRatings.reduce((sum, r) => sum + r.rating2 ** 2, 0);
+
+    const pSum = commonRatings.reduce(
+      (sum, r) => sum + r.rating1 * r.rating2,
+      0
+    );
+
+    const num = pSum - (sum1 * sum2) / commonRatings.length;
+    const den = Math.sqrt(
+      (sum1Sq - sum1 ** 2 / commonRatings.length) *
+        (sum2Sq - sum2 ** 2 / commonRatings.length)
+    );
+
+    console.log(
+      "Sum1:",
+      sum1,
+      "Sum2:",
+      sum2,
+      "Sum1Sq:",
+      sum1Sq,
+      "Sum2Sq:",
+      sum2Sq,
+      "PSum:",
+      pSum,
+      "Num:",
+      num,
+      "Den:",
+      den
+    );
+
+    if (den === 0) return 0;
+
+    return num / den;
   }
 }
 

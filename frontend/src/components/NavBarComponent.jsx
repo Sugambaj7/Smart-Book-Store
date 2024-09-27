@@ -27,7 +27,7 @@ const NavBarComponent = () => {
               <Link to="/">Smart Book Store</Link>
             </h1>
             <form
-              className="flex items-center justify-start h-full w-[60%]"
+              className="flex items-center justify-start h-full w-[40%]"
               action=""
               method="post"
             >
@@ -51,9 +51,19 @@ const NavBarComponent = () => {
                 </div>
               </div>
             </form>
-            <div className="h-full flex items-center uppercase w-[20%] relative">
+            <div className="h-full flex items-center uppercase w-[40%] relative">
               {userInfo && userInfo.isAdmin === false && (
                 <div className="flex">
+                  <Link
+                    to="/recommendedProducts"
+                    className="pl-2 text-custom_black uppercase hover:text-white"
+                  >
+                    Personalized Products
+                  </Link>
+                </div>
+              )}
+              {userInfo && userInfo.isAdmin === false && (
+                <div className="flex pl-10">
                   <FaShoppingCart className="text-custom_black hover:text-white" />
                   <Link
                     to="/cart"

@@ -13,6 +13,7 @@ import ShippingComponent from "../components/ShippingComponent";
 import PaymentComponent from "../components/PaymentComponent";
 import PlaceOrderComponent from "../components/PlaceOrderComponent";
 import OrderViewComponent from "../components/OrderViewComponent";
+import RecommendedProducts from "../components/recommendedProducts";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: "/order/:user_id",
         element: <OrderViewComponent />,
+      },
+      {
+        path: "/recommendedProducts",
+        element: <RecommendedProducts />,
       }
     ],
   },

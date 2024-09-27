@@ -126,8 +126,35 @@ export const recommendProducts = createAsyncThunk(
   "products/recommendProducts",
   async (_, { rejectWithValue }) => {
     try {
+      const response = await axios.get("http://localhost:5001/recommend");
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const fetchTopRatedProducts = createAsyncThunk(
+  "products/fetchTopRatedProducts",
+  async (_, { rejectWithValue }) => {
+    try {
       const response = await axios.get(
-        "http://localhost:5001/recommend"
+        "http://localhost:5001/recommend/top_rated_products"
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const recommendPersonalizedProducts = createAsyncThunk(
+  "products/recommendPersonalizedProducts",
+  async (user_id, { rejectWithValue }) => {
+    console.log(user_id, "user_id ma k aaako xa product sliceeeeeeeeeeeeee");
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/recommend/recommendUserBasedProducts/${user_id}`
       );
       return response?.data;
     } catch (error) {
@@ -140,6 +167,7 @@ const productSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
+    recommendPersonalizeProducts: [],
     loading: false,
     error: null,
     success: false,
@@ -236,6 +264,23 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(recommendProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(recommendPersonalizedProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(recommendPersonalizedProducts.fulfilled, (state, action) => {
+        console.log(
+          action.payload,
+          "ma database bata personalized recommended vyera aaako"
+        );
+        state.loading = false;
+        state.recommendPersonalizeProducts = (action.payload.products);
+        state.error = null;
+      })
+      .addCase(recommendPersonalizedProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
