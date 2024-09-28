@@ -4,6 +4,7 @@ import userLoginReducer from "../features/user/userLoginSlice";
 import productReducer from "../features/products/productSlice";
 import cartReducer from "../features/cart/cartSlice";
 import orderReducer from "../features/order/orderSlice";
+import userlistReducer from "../features/user/userListSlice";
 
 // Retrieve user info from local storage
 const userInfoFromStorage = localStorage.getItem("userInfo")
@@ -17,6 +18,7 @@ const store = configureStore({
     products: productReducer,
     cart: cartReducer,
     order: orderReducer,
+    userlist: userlistReducer,
   },
   preloadedState: {
     userLogin: {

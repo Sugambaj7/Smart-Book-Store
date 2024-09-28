@@ -1,14 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
-import { listMyRecentOrders } from "../features/order/orderSlice";
+import {
+  listMyRecentOrders,
+  updateDeliveryAndPaidStatus,
+} from "../features/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearMyCart } from "../features/cart/cartSlice";
 import { recommendProducts } from "../features/products/productSlice";
 import ProductCardComponent from "./ProductCardComponent";
-// import { changePlaceOrderStatus } from "../features/order/orderSlice";
-
-
 
 const OrderViewComponent = () => {
   const dispatch = useDispatch();
@@ -20,13 +20,11 @@ const OrderViewComponent = () => {
   );
 
   useEffect(() => {
-    // dispatch(changePlaceOrderStatus());
     dispatch(listMyRecentOrders(user_id));
     dispatch(clearMyCart());
     //sorted in ascending order
     dispatch(recommendProducts());
     console.log(user_id, "user_id ma k aaako xa order view component");
-    dispatch(recommendPersonalizedProducts(user_id));
   }, [success, dispatch, user_id]);
 
   const { userInfo } = useSelector((state) => state.userLogin);
@@ -34,10 +32,6 @@ const OrderViewComponent = () => {
   //sortedProducts
   const { products } = useSelector((state) => state.products);
 
-  const itemsPrice = createdOrder?.orderItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
   return (
     <>
       <div className="w-full flex mt-5 mb-10">
@@ -91,15 +85,9 @@ const OrderViewComponent = () => {
             </div>
           </div>
         </div>
-        <div className="w-[20%] h-[40vh] border border-border_table flex-col">
+        <div className="w-[20%] h-[34vh] border border-border_table flex-col">
           <div className="border-b border-border_table flex justify-center items-start">
             <p className="text-xl uppercase py-4">Order Summary</p>
-          </div>
-          <div className="border-b border-border_table">
-            <div className="flex justify-between px-8 py-2">
-              <h4 className="text-md">Items</h4>
-              <p>Rs {itemsPrice}</p>
-            </div>
           </div>
           <div className="border-b border-border_table">
             <div className="flex justify-between px-8 py-2">
@@ -139,13 +127,6 @@ const OrderViewComponent = () => {
         <div className="w-[70%] flex flex-col">
           <h2 className="text-3xl text-black">You May Also Like</h2>
           <ProductCardComponent />
-        </div>
-        <div className="w-[15%]"></div>
-      </div>
-      <div className="flex bg-red-500">
-        <div className="w-[15%]"></div>
-        <div className="w-[70%] flex flex-col">
-          <h2 className="text-3xl text-black">Personalized Recommendations</h2>
         </div>
         <div className="w-[15%]"></div>
       </div>

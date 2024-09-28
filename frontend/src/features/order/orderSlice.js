@@ -6,6 +6,9 @@ const initialState = {
   myerror: null,
   success: false,
   createdOrder: null,
+  updateDeliveryAndPaidStatus: false,
+  allOrders: [],
+  specificOrder: null,
 };
 
 export const createOrder = createAsyncThunk(
@@ -65,13 +68,52 @@ export const listMyRecentOrders = createAsyncThunk(
   }
 );
 
+export const fetchAllOrders = createAsyncThunk(
+  "order/fetchAllOrders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:5001/order");
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+export const updateDeliveryAndPaidStatus = createAsyncThunk(
+  "order/updateDeliveryAndPaidStatus",
+  async ({ order_id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5001/order/update/${order_id}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+export const getOrderById = createAsyncThunk(
+  "order/getOrderById",
+  async (order_id, { rejectWithValue }) => {
+    console.log(order_id, "order_id ma k aaako xa order slice");
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/order/viewOrder/${order_id}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    changePlaceOrderStatus: (state) => {
-      state.success = false;
-    },
+    // changePlaceOrderStatus: (state) => {
+    //   state.success = false;
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -104,6 +146,50 @@ const orderSlice = createSlice({
       .addCase(listMyRecentOrders.rejected, (state, action) => {
         state.loading = false;
         state.myerror = action.payload;
+      })
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.loading = true;
+        state.myerror = null;
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.allOrders = action.payload;
+        state.myerror = null;
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.myerror = action.payload;
+      })
+      .addCase(updateDeliveryAndPaidStatus.pending, (state) => {
+        state.loading = true;
+        state.myerror = null;
+      })
+      .addCase(updateDeliveryAndPaidStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.updateDeliveryAndPaidStatus = true;
+        state.myerror = null;
+      })
+      .addCase(updateDeliveryAndPaidStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.myerror = action.payload;
+        state.updateDeliveryAndPaidStatus = false;
+      })
+      .addCase(getOrderById.pending, (state) => {
+        state.loading = true;
+        state.myerror = null;
+      })
+      .addCase(getOrderById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.specificOrder = action.payload;
+        state.myerror = null;
+      })
+      .addCase(getOrderById.rejected, (state, action) => {
+        state.loading = false;
+        state.myerror = action.payload;
+        state.updateDeliveryAndPaidStatus = false;
       });
   },
 });

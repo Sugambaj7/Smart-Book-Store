@@ -15,6 +15,9 @@ import PlaceOrderComponent from "../components/PlaceOrderComponent";
 import OrderViewComponent from "../components/OrderViewComponent";
 import RecommendedProducts from "../components/recommendedProducts";
 import SearchResultComponent from "../components/SearchResultComponent";
+import UserListComponent from "../components/UserListComponent";
+import UserOrdersComponent from "../components/UserOrdersComponent";
+import SpecificOrderComponent from "../components/SpecificOrderComponent";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +87,18 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <SearchResultComponent />,
+      },
+      {
+        path: "/admin/userlist",
+        element: <UserListComponent />,
+      },
+      {
+        path: "/admin/orders",
+        element: <UserOrdersComponent />,
+      },
+      {
+        path: "/admin/vieworder/:order_id",
+        element: <SpecificOrderComponent />,
       },
     ],
   },

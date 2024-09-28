@@ -59,6 +59,62 @@ class OrderController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  getAllOrder = asyncHandler(async (req, res) => {
+    try {
+      const orders = await Order.find({});
+      if (orders.length > 0) {
+        res.status(200).json(orders);
+      } else {
+        res.status(404).json({ message: "No orders found" });
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  updateDeliveryAndPaidStatus = asyncHandler(async (req, res) => {
+    const { order_id } = req.params;
+    try {
+      const updatedOrder = await Order.findByIdAndUpdate(
+        order_id,
+        {
+          $set: {
+            isPaid: true,
+            isDelivered: true,
+          },
+        },
+        { new: true }
+      );
+
+      if (updatedOrder) {
+        res
+          .status(200)
+          .json({ message: "Order updated successfully", order: updatedOrder });
+      } else {
+        res.status(404).json({ message: "Order not found" });
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  getOrderById = asyncHandler(async (req, res) => {
+    const { order_id } = req.params;
+    try {
+      const order = await Order.findById(order_id);
+      if (order) {
+        res.status(200).json(order);
+      } else {
+        res.status(404).json({ message: "Order not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
 }
 
 module.exports = OrderController;
