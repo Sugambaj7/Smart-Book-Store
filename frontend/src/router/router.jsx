@@ -18,6 +18,7 @@ import SearchResultComponent from "../components/SearchResultComponent";
 import UserListComponent from "../components/UserListComponent";
 import UserOrdersComponent from "../components/UserOrdersComponent";
 import SpecificOrderComponent from "../components/SpecificOrderComponent";
+import MyOrdersComponent from "../components/MyOrdersComponent";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/vieworder/:order_id",
+        element: <SpecificOrderComponent />,
+      },
+      {
+        path: "/view/orders/:user_id",
+        element: <MyOrdersComponent />,
+      },
+      {
+        path: "/view_my_specific_order/:order_id",
         element: <SpecificOrderComponent />,
       },
     ],

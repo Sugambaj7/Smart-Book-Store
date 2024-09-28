@@ -101,6 +101,22 @@ class OrderController {
     }
   });
 
+  getOrderByUserId = asyncHandler(async (req, res) => {
+    const { user_id } = req.params;
+    console.log(user_id, "req.params");
+    try {
+      const orders = await Order.find({ user: user_id });
+      if (orders.length > 0) {
+        res.status(200).json(orders);
+      } else {
+        res.status(404).json({ message: "No orders found for this user" });
+      }
+    } catch (error) {
+      console.error("Error fetching orders by user ID:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   getOrderById = asyncHandler(async (req, res) => {
     const { order_id } = req.params;
     try {

@@ -14,7 +14,7 @@ const SpecificOrderComponent = () => {
             <h1 className="text-2xl uppercase">order id {specificOrder._id}</h1>
             <p className="text-xl text-black mt-4">Shipping</p>
             <p className="pt-3 pb-0 text-md">
-              address: {specificOrder.shippingAddress.address},
+              address: {specificOrder.shippingAddress.city},
               {specificOrder.shippingAddress.address}
             </p>
             <p className="pt-3 pb-4 text-md">
@@ -54,15 +54,9 @@ const SpecificOrderComponent = () => {
           </div>
         </div>
       </div>
-      <div className="w-[20%] h-[40vh] border border-border_table flex-col">
+      <div className="w-[20%] h-[35vh] border border-border_table flex-col">
         <div className="border-b border-border_table flex justify-center items-start">
           <p className="text-xl uppercase py-4">Order Summary</p>
-        </div>
-        <div className="border-b border-border_table">
-          <div className="flex justify-between px-8 py-2">
-            <h4 className="text-md">Items</h4>
-            <p>Rs </p>
-          </div>
         </div>
         <div className="border-b border-border_table">
           <div className="flex justify-between px-8 py-2">

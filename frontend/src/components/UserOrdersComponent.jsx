@@ -40,8 +40,7 @@ const UserOrdersComponent = () => {
     dispatch(getOrderById(order_id)).then((response) => {
       if (response.meta.requestStatus === "fulfilled") {
         navigate(`/admin/vieworder/${order_id}`);
-      }
-      else{
+      } else {
         console.error("Failed to get order details");
       }
     });

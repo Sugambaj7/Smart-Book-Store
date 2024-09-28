@@ -9,6 +9,7 @@ const initialState = {
   updateDeliveryAndPaidStatus: false,
   allOrders: [],
   specificOrder: null,
+  allMyOrders: [],
 };
 
 export const createOrder = createAsyncThunk(
@@ -59,7 +60,7 @@ export const listMyRecentOrders = createAsyncThunk(
     console.log(user_id, "user_id ma k aaako xa order slice");
     try {
       const response = await axios.get(
-        `http://localhost:5001/order/${user_id}`
+        `http://localhost:5001/order/recent/${user_id}`
       );
       return response?.data;
     } catch (error) {
@@ -79,6 +80,21 @@ export const fetchAllOrders = createAsyncThunk(
     }
   }
 );
+
+export const getOrderById = createAsyncThunk(
+  "order/getOrderById",
+  async (order_id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/order/userOrders/${order_id}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 export const updateDeliveryAndPaidStatus = createAsyncThunk(
   "order/updateDeliveryAndPaidStatus",
   async ({ order_id }, { rejectWithValue }) => {
@@ -92,13 +108,12 @@ export const updateDeliveryAndPaidStatus = createAsyncThunk(
     }
   }
 );
-export const getOrderById = createAsyncThunk(
-  "order/getOrderById",
-  async (order_id, { rejectWithValue }) => {
-    console.log(order_id, "order_id ma k aaako xa order slice");
+export const getOrderByUserId = createAsyncThunk(
+  "order/getOrderByUserId",
+  async ({user_id}, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/order/viewOrder/${order_id}`
+        `http://localhost:5001/order/viewOrder/${user_id}`
       );
       return response?.data;
     } catch (error) {
@@ -187,6 +202,21 @@ const orderSlice = createSlice({
         state.myerror = null;
       })
       .addCase(getOrderById.rejected, (state, action) => {
+        state.loading = false;
+        state.myerror = action.payload;
+        state.updateDeliveryAndPaidStatus = false;
+      })
+      .addCase(getOrderByUserId.pending, (state) => {
+        state.loading = true;
+        state.myerror = null;
+      })
+      .addCase(getOrderByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.allMyOrders = action.payload;
+        state.myerror = null;
+      })
+      .addCase(getOrderByUserId.rejected, (state, action) => {
         state.loading = false;
         state.myerror = action.payload;
         state.updateDeliveryAndPaidStatus = false;
