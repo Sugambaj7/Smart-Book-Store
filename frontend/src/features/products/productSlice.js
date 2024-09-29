@@ -134,6 +134,20 @@ export const recommendProducts = createAsyncThunk(
   }
 );
 
+export const fetchTopRatedProducts = createAsyncThunk(
+  "products/fetchTopRatedProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5001/product/recommend_top_rated_products"
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 // export const fetchTopRatedProducts = createAsyncThunk(
 //   "products/fetchTopRatedProducts",
 //   async (_, { rejectWithValue }) => {
@@ -186,6 +200,7 @@ const productSlice = createSlice({
     loading: false,
     error: null,
     success: false,
+    recommendedTopRatedProducts: [],
   },
   reducers: {
     updateSuccess: (state) => {
@@ -309,6 +324,19 @@ const productSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(fetchProductsByName.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchTopRatedProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTopRatedProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.recommendedTopRatedProducts = action.payload;
+      })
+      .addCase(fetchTopRatedProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

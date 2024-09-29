@@ -9,5 +9,6 @@ userRouter.post("/register", UserInstance.Signup);
 userRouter.post("/login", UserInstance.Login);
 userRouter.get("/fetchuserlist", UserInstance.fetchuserlist);
 userRouter.delete("/delete/:id", UserInstance.deleteUser);
+userRouter.put("/update/:user_id", UserInstance.updateUserEmailAndPassword);
 
 module.exports = userRouter;

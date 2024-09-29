@@ -72,7 +72,7 @@ const NavBarComponent = () => {
                 <div className="flex">
                   <Link
                     to="/recommendedProducts"
-                    className="pl-2 text-custom_black uppercase hover:text-white"
+                    className="pl-20 text-custom_black uppercase hover:text-white"
                   >
                     Personalized Products
                   </Link>
@@ -90,7 +90,7 @@ const NavBarComponent = () => {
                 </div>
               )}
               {!userInfo && (
-                <div className="flex">
+                <div className="flex pl-72">
                   <FaShoppingCart className="text-custom_black hover:text-white" />
                   <Link
                     to="/cart"
@@ -102,7 +102,7 @@ const NavBarComponent = () => {
               )}
 
               {!userInfo && (
-                <div className="flex ml-8 z-10">
+                <div className="flex pl-8 z-10">
                   <FaUser className="text-custom_black hover:text-white" />
                   <Link
                     to="/login"
@@ -127,7 +127,7 @@ const NavBarComponent = () => {
               )}
 
               {userInfo && userInfo.isAdmin && (
-                <div className="ml-12">
+                <div className="pl-96">
                   <p
                     className="cursor-pointer flex text-custom_black hover:text-white"
                     onClick={() => setDropdown(!openDropdown)}

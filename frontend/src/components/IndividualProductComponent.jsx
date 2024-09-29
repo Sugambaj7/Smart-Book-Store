@@ -119,6 +119,7 @@ const IndividualProductComponent = () => {
                 <p className="text-black text-sm tracking-wide">No Reviews</p>
               </div>
             ) : (
+            //products is array and reviews is object
               products.reviews.map((review) => (
                 <div
                   key={review._id}

@@ -19,6 +19,8 @@ import UserListComponent from "../components/UserListComponent";
 import UserOrdersComponent from "../components/UserOrdersComponent";
 import SpecificOrderComponent from "../components/SpecificOrderComponent";
 import MyOrdersComponent from "../components/MyOrdersComponent";
+import UserProfile from "../components/UserProfileComponent";
+import AdminProfile from "../components/AdminProfileComponent";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +110,14 @@ const router = createBrowserRouter([
       {
         path: "/view_my_specific_order/:order_id",
         element: <SpecificOrderComponent />,
+      },
+      {
+        path: "/user/profile",
+        element: <UserProfile />,
+      },
+      {
+        path: "/admin/profile",
+        element: <AdminProfile />,
       },
     ],
   },

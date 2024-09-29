@@ -53,6 +53,7 @@ productRouter.delete(
   ProductInstance.deleteProduct
 );
 productRouter.get("/fetchProductsByName", ProductInstance.fetchByName);
+productRouter.get("/recommend_top_rated_products", ProductInstance.recommendTopRatedProducts);
 productRouter.get("/:product_id", ProductInstance.fetchIndividualProduct);
 productRouter.post("/review/:product_id", ProductInstance.createProductReview);
 productRouter.get("/", ProductInstance.recommendProducts);

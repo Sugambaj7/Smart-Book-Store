@@ -17,7 +17,9 @@ const UserDropdownComponent = () => {
   return (
     <div className="bg-white flex flex-col absolute top-14 right-20 w-36 z-20 admin-dropdown mt-3 border border-border_login_input">
       <ul className="flex flex-col text-black ">
-        <li className="px-6 py-3 text-sm">Profile</li>
+        <Link to={"/user/profile"}>
+          <li className="px-6 py-3 text-sm">Profile</li>
+        </Link>
         <Link to={`/view/orders/${userID}`}>
           <li className="px-6 py-3 text-sm">Orders</li>
         </Link>

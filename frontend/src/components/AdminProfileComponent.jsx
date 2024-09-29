@@ -6,7 +6,7 @@ import {
   clearUpdateSuccess,
 } from "../features/user/userUpdateSlice";
 
-const UserProfileComponent = () => {
+const AdminProfileComponent = () => {
   const { myerror, success, userInfo } = useSelector(
     (state) => state.userLogin
   );
@@ -16,16 +16,16 @@ const UserProfileComponent = () => {
 
   const userId = userInfo._id;
 
+  useEffect(() => {
+    dispatch(clearUpdateSuccess());
+  }, []);
+
   const [email, setEmail] = useState(userInfo.email);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(clearUpdateSuccess());
-  }, []);
 
   const handleFocus = () => {
     dispatch(clearError());
@@ -78,11 +78,11 @@ const UserProfileComponent = () => {
       <div className="w-[60%] flex justify-center items-center">
         <div className="w-[50%]">
           <form action="" onSubmit={submitHandler}>
-            <h2 className="text-3xl">USER PROFILE</h2>
+            <h2 className="text-3xl">ADMIN PROFILE</h2>
             {updateSuccess && (
               <div className="w-full bg-custom_green px-6 py-3 border border-custom_alert rounded mt-8">
                 <p className="text-white text-sm tracking-wide">
-                  User Update Successful!!!
+                  Admin Update Successful!!!
                 </p>
               </div>
             )}
@@ -146,4 +146,4 @@ const UserProfileComponent = () => {
   );
 };
 
-export default UserProfileComponent;
+export default AdminProfileComponent;

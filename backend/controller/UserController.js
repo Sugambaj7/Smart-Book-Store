@@ -109,6 +109,29 @@ class UserController {
       res.status(400).json({ message: error.message });
     }
   });
+
+  updateUserEmailAndPassword = asyncHandler(async (req, res) => {
+    const { user_id } = req.params;
+    const { email, password, confirmPassword } = req.body;
+
+    try {
+      const user = await User.findById(user_id);
+
+      if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+
+      user.email = email;
+      user.password = password;
+      user.confirmPassword = confirmPassword;
+
+      await user.save();
+      res.status(200).json({ message: "User updated successfully", user });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
 }
 
 module.exports = UserController;

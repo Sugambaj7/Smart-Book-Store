@@ -168,6 +168,9 @@ class ProductController {
     }
   });
 
+
+
+  //algo part
   createProductReview = asyncHandler(async (req, res) => {
     const { product_id } = req.params;
     const { userInfo, ...reviewData } = req.body;
@@ -186,15 +189,20 @@ class ProductController {
           user: user_id,
           name: user_name,
         };
+
+        //user given review included rating, comment, userid, and name
         product.reviews.push(review);
 
+        //database bata product to review count gareko
         product.numReviews = product.reviews.length;
 
         let sumOfRatings = 0;
         for (let i = 0; i < product.reviews.length; i++) {
+          //assigns rating given by different users to same product
           sumOfRatings += product.reviews[i].rating;
         }
 
+        //average rating of product
         product.rating = sumOfRatings / product.reviews.length;
 
         await product.save();
@@ -210,7 +218,7 @@ class ProductController {
   recommendProducts = asyncHandler(async (req, res) => {
     try {
       const products = await Product.find({});
-      const sortedProducts = this.mergeSort(products, "name"); // Use 'this' to call the method
+      const sortedProducts = this.mergeSort(products, "name");
       console.log(sortedProducts, "mero sorted product from database");
       res.json({ products: sortedProducts });
     } catch (error) {
@@ -223,7 +231,10 @@ class ProductController {
       return arr;
     }
 
+    //calculates middle index of an array
     const middle = Math.floor(arr.length / 2);
+
+    //slices array into two halves
     const leftHalf = arr.slice(0, middle);
     const rightHalf = arr.slice(middle);
 
@@ -264,13 +275,28 @@ class ProductController {
   recommendTopRatedProducts = asyncHandler(async (req, res) => {
     try {
       const products = await Product.find({});
-      const sortedProducts = this.mergeSort(products, "name");
-      console.log(sortedProducts, "mero sorted product from database");
+      const sortedProducts = this.sortByRating(products);
       res.json({ products: sortedProducts });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
+
+  // Sort products by average rating in descending order
+  recommendTopRatedProducts = asyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({});
+      const sortedProducts = this.sortByRating(products);
+      res.json({ products: sortedProducts });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Sort products by average rating in descending order
+  sortByRating(products) {
+    return products.sort((a, b) => b.averageRating - a.averageRating);
+  }
 
   recommendUserBasedProducts = asyncHandler(async (req, res) => {
     const { userId } = req.params;
@@ -409,6 +435,64 @@ class ProductController {
     if (den === 0) return 0;
 
     return num / den;
+  }
+
+  // Fetch all products and return the top-rated ones
+  recommendTopRatedProducts = asyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({}).populate('reviews');
+      const productsWithAvgRating = products.map(product => {
+        const averageRating = this.calculateAverageRating(product.reviews);
+        return { ...product._doc, averageRating };
+      });
+      const sortedProducts = this.sortByRating(productsWithAvgRating);
+      res.json({ products: sortedProducts });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Calculate average rating for a product
+  calculateAverageRating(reviews) {
+    if (reviews.length === 0) return 0;
+    const sumOfRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return sumOfRatings / reviews.length;
+  }
+
+  // Sort products by average rating in descending order
+  sortByRating(products) {
+    return this.mergeSort(products, (a, b) => b.averageRating - a.averageRating);
+  }
+
+  // Merge sort implementation
+  mergeSort(arr, compare) {
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    const middle = Math.floor(arr.length / 2);
+    const left = arr.slice(0, middle);
+    const right = arr.slice(middle);
+
+    return this.merge(this.mergeSort(left, compare), this.mergeSort(right, compare), compare);
+  }
+
+  merge(left, right, compare) {
+    let result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+      if (compare(left[leftIndex], right[rightIndex]) <= 0) {
+        result.push(left[leftIndex]);
+        leftIndex++;
+      } else {
+        result.push(right[rightIndex]);
+        rightIndex++;
+      }
+    }
+
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
   }
 }
 

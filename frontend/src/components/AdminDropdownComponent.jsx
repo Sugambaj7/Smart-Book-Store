@@ -13,9 +13,11 @@ const AdminDropdownComponent = () => {
     navigate("/");
   };
   return (
-    <div className="bg-white flex flex-col absolute top-14 right-20 w-36 z-20 admin-dropdown mt-3 border border-border_login_input">
+    <div className="bg-white flex flex-col absolute top-14 right-30 w-36 z-20 admin-dropdown mt-3 border border-border_login_input">
       <ul className="flex flex-col text-black ">
-        <li className="px-6 py-3 text-sm">Profile</li>
+        <li className="px-6 py-3 text-sm">
+          <Link to="/admin/profile">Profile</Link>
+        </li>
         <li className="px-6 py-3 text-sm">
           <Link to="/admin/userlist">Users</Link>
         </li>
