@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders } from "../features/order/orderSlice";
+import {
+  fetchAllOrders,
+  updateDeliveryAndPaidStatus,
+  getOrderById,
+} from "../features/order/orderSlice";
 import { fetchUserList } from "../features/user/userListSlice";
-import { updateDeliveryAndPaidStatus } from "../features/order/orderSlice";
-import { getOrderById } from "../features/order/orderSlice";
+import { updateCountInStock } from "../features/products/productSlice";
 
 const UserOrdersComponent = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchAllOrders());
     dispatch(fetchUserList());
@@ -22,11 +26,12 @@ const UserOrdersComponent = () => {
     return date.toISOString().split("T")[0];
   };
 
-  const changeDeliveryAndPaidStatus = (order_id) => {
+  const changeDeliveryAndPaidStatus = (order_id, items) => {
     dispatch(updateDeliveryAndPaidStatus({ order_id }))
       .then((response) => {
         if (response.meta.requestStatus === "fulfilled") {
           dispatch(fetchAllOrders());
+          dispatch(updateCountInStock({ items }));
         } else {
           console.error("Failed to update delivery and paid status");
         }
@@ -69,6 +74,10 @@ const UserOrdersComponent = () => {
               <tbody className="w-full">
                 {(allOrders || []).map((order) => {
                   const user = userlist.find((user) => user._id === order.user);
+
+                  // Initialize totalQty to keep track of the total quantity
+                  let totalQty = 0;
+
                   return (
                     <tr
                       key={order._id}
@@ -103,11 +112,28 @@ const UserOrdersComponent = () => {
                               <button
                                 className="px-2 py-2 mt-2 bg-custom_green text-white"
                                 onClick={() =>
-                                  changeDeliveryAndPaidStatus(order._id)
+                                  changeDeliveryAndPaidStatus(
+                                    order._id,
+                                    order.orderItems
+                                  )
                                 }
+                                disabled={order.isPaid}
                               >
-                                Mark Paid
+                                {order.isPaid ? "Paid" : "Mark Paid"}
                               </button>
+                              <ul>
+                                {order.orderItems?.map((item, index) => {
+                                  totalQty += item.qty;
+                                  return (
+                                    <li key={index}>
+                                      <p>
+                                        Item {index + 1}: {item.qty}
+                                      </p>
+                                    </li>
+                                  );
+                                }) || null}
+                              </ul>
+                              <p>Total Quantity: {totalQty}</p>
                             </div>
                           </div>
                           <div className="w-[20%]"></div>

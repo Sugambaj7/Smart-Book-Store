@@ -23,7 +23,7 @@ const RecommendedProducts = () => {
     <div className="flex mt-10 mb-20">
       <div className="w-[10%]"></div>
       <div className="w-[80%] flex flex-col">
-        <h1 className="text-3xl">Personalized Products</h1>
+        <h1 className="text-3xl">Personalized Books</h1>
         <div className="products">
           <div className="flex flex-wrap mt-12">
             {recommendPersonalizeProducts &&
@@ -69,7 +69,7 @@ const RecommendedProducts = () => {
               ))
             ) : (
               <div>
-                <p className="text-sm">
+                <p className="text-2xl text-red-500">
                   No Personalized Products yet!!! Didn't fulfill criteria for
                   recommendation!!!
                 </p>

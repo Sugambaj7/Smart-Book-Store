@@ -13,7 +13,7 @@ const HomePageTopRatedComponent = () => {
   return (
     <div>
       <div className="w-full mb-40">
-        <h1 className="uppercase text-3xl">Top Rated Products</h1>
+        <h1 className="uppercase text-3xl">Top Rated Books</h1>
         <TopRatedProductCardComponent />
       </div>
     </div>

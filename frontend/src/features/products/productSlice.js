@@ -126,7 +126,9 @@ export const recommendProducts = createAsyncThunk(
   "products/recommendProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:5001/recommend");
+      const response = await axios.get(
+        "http://localhost:5001/product/recommendProducts"
+      );
       return response?.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -184,6 +186,21 @@ export const fetchProductsByName = createAsyncThunk(
     try {
       const response = await axios.get(
         `http://localhost:5001/product/fetchproductsByName?name=${name}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const updateCountInStock = createAsyncThunk(
+  "products/updateCountInStock",
+  async ({ items }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5001/product/updateCountInStock`,
+        { items }
       );
       return response?.data;
     } catch (error) {
