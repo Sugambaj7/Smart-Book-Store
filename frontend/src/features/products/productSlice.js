@@ -101,6 +101,20 @@ export const fetchIndividualProduct = createAsyncThunk(
   }
 );
 
+export const recommendContentBasedProducts = createAsyncThunk(
+  "products/recommendContentBasedProducts",
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/product/recommendContentBasedProducts/${productId}`
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 export const createProductReview = createAsyncThunk(
   "products/createProductReview",
   async ({ product_id, reviewData, userInfo }, { rejectWithValue }) => {

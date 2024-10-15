@@ -555,6 +555,162 @@ class ProductController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  // Function to preprocess text
+  preprocessText(text) {
+    const stopWords = new Set([
+      "a",
+      "an",
+      "the",
+      "and",
+      "or",
+      "but",
+      "if",
+      "then",
+      "else",
+      "when",
+      "at",
+      "by",
+      "for",
+      "with",
+      "about",
+      "against",
+      "between",
+      "into",
+      "through",
+      "during",
+      "before",
+      "after",
+      "above",
+      "below",
+      "to",
+      "from",
+      "up",
+      "down",
+      "in",
+      "out",
+      "on",
+      "off",
+      "over",
+      "under",
+      "again",
+      "further",
+      "then",
+      "once",
+      "here",
+      "there",
+      "all",
+      "any",
+      "both",
+      "each",
+      "few",
+      "more",
+      "most",
+      "other",
+      "some",
+      "such",
+      "no",
+      "nor",
+      "not",
+      "only",
+      "own",
+      "same",
+      "so",
+      "than",
+      "too",
+      "very",
+      "s",
+      "t",
+      "can",
+      "will",
+      "just",
+      "don",
+      "should",
+      "now",
+    ]);
+    return text
+      .toLowerCase()
+      .split(/\W+/)
+      .filter((word) => word && !stopWords.has(word));
+  }
+
+  // Function to calculate term frequency (TF)
+  calculateTF(tokens) {
+    const tf = {};
+    tokens.forEach((token) => {
+      if (!tf[token]) {
+        tf[token] = 0;
+      }
+      tf[token] += 1;
+    });
+    return tf;
+  }
+
+  // Function to calculate cosine similarity
+  cosineSimilarity(vecA, vecB) {
+    const intersection = Object.keys(vecA).filter((token) => vecB[token]);
+    const dotProduct = intersection.reduce(
+      (sum, token) => sum + vecA[token] * vecB[token],
+      0
+    );
+    const magnitudeA = Math.sqrt(
+      Object.values(vecA).reduce((sum, val) => sum + val * val, 0)
+    );
+    const magnitudeB = Math.sqrt(
+      Object.values(vecB).reduce((sum, val) => sum + val * val, 0)
+    );
+    return dotProduct / (magnitudeA * magnitudeB);
+  }
+
+  // Function to get content-based recommendations
+  async getContentBasedRecommendations(productId) {
+    const products = await Product.find(); // Fetch all products
+    const targetProduct = products.find(
+      (product) => product._id.toString() === productId
+    );
+
+    if (!targetProduct) {
+      throw new Error("Product not found");
+    }
+
+    const targetTokens = this.preprocessText(targetProduct.description);
+    const targetTF = this.calculateTF(targetTokens);
+
+    const similarities = products.map((product) => {
+      if (product._id.toString() === productId) return -1; // Skip the target product itself
+      const tokens = this.preprocessText(product.description);
+      const tf = this.calculateTF(tokens);
+      return this.cosineSimilarity(targetTF, tf);
+    });
+
+    const recommendedProducts = products
+      .map((product, index) => ({ product, similarity: similarities[index] }))
+      .filter((item) => item.similarity > 0)
+      .sort((a, b) => b.similarity - a.similarity)
+      .map((item) => item.product);
+
+    return recommendedProducts;
+  }
+
+  recommendContentBasedProducts = asyncHandler(async (req, res) => {
+    const { productId } = req.params;
+    if (productId) {
+      try {
+        const recommendedProducts = await this.getContentBasedRecommendations(
+          productId
+        );
+        if (recommendedProducts.length > 0) {
+          res.status(200).json(recommendedProducts);
+        } else {
+          res.status(404).json({ message: "No recommended products found" });
+        }
+      } catch (error) {
+        res.status(400).json({ message: error.message });
+      }
+    } else {
+      res.status(400).json({ message: "Product ID parameter is required" });
+    }
+  });
 }
 
 module.exports = ProductController;
